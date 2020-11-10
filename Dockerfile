@@ -20,14 +20,19 @@ RUN apk add --no-cache \
 FROM alpine:3.12 as prod
 
 LABEL maintainer="Carlos Remuzzi carlosremuzzi@gmail.com"
-LABEL org.label-schema.description="yet anothe SoftHSMv2 dockerization"
+LABEL org.label-schema.description="yet another SoftHSMv2 dockerization"
 LABEL org.label-schema.name="SoftHSMv2 "
 LABEL org.label-schema.schema-version="1.0"
 LABEL org.label-schema.vendor="CGRemuzzi"
 
 ENV SOFTHSM2_CONF=/home/softhsm/softhsm2.conf
 
-RUN adduser -u 10001 -D softhsm
+RUN apk add --no-cache \
+    libstdc++ \
+    musl \
+    opensc \
+    openssl \
+  && adduser -u 10001 -D softhsm
 
 WORKDIR /home/softhsm
 
