@@ -40,7 +40,7 @@ WORKDIR /home/softhsm
 
 COPY --chown=softhsm:softhsm softhsm2.conf /home/softhsm/softhsm2.conf
 COPY --from=build /usr/local/lib/softhsm /usr/local/lib/softhsm
-COPY --from=build /usr/local/bin/* /usr/local/bin
+COPY --from=build /usr/local/bin/* /usr/local/bin/
 
 USER softhsm
 
