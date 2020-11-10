@@ -32,7 +32,9 @@ RUN apk add --no-cache \
     musl \
     opensc \
     openssl \
-  && adduser -u 10001 -D softhsm
+  && adduser -u 10001 -D softhsm \
+  && mkdir /tokens \
+  && chown -R softhsm:softhsm /tokens
 
 WORKDIR /home/softhsm
 
