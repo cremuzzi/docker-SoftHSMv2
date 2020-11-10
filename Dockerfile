@@ -1,13 +1,8 @@
-FROM alpine:3.12
+FROM alpine:3.12 as build
 
 ARG SOFTHSMV2_VERSION=2.6.1
 
-LABEL maintainer="Carlos Remuzzi <carlosremuzzi@gmail.com>"
-LABEL version=${SOFTHSMV2_VERSION}
-
 RUN apk add --no-cache \
-    openssl \
-  && apk add --no-cache --virtual .build-deps \
     autoconf \
     automake \
     build-base \
@@ -21,5 +16,24 @@ RUN apk add --no-cache \
   && ./configure \
   && make \
   && make install
+
+FROM alpine:3.12 as prod
+
+LABEL maintainer="Carlos Remuzzi carlosremuzzi@gmail.com"
+LABEL org.label-schema.description="yet anothe SoftHSMv2 dockerization"
+LABEL org.label-schema.name="SoftHSMv2 "
+LABEL org.label-schema.schema-version="1.0"
+LABEL org.label-schema.vendor="CGRemuzzi"
+
+ENV SOFTHSM2_CONF=/home/softhsm/softhsm2.conf
+
+RUN adduser -u 10001 -D softhsm
+
+WORKDIR /home/softhsm
+
+COPY --chown=softhsm:softhsm softhsm2.conf /home/softhsm/softhsm2.conf
+COPY --from=build /usr/local/bin/* /usr/local/bin
+
+USER softhsm
 
 CMD ["softhsm2-util","--help"]
