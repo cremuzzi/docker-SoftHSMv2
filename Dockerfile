@@ -1,4 +1,4 @@
-FROM alpine:3.12 as build
+FROM alpine:3.14 as build
 
 ARG SOFTHSMV2_VERSION=2.6.1
 
@@ -17,7 +17,7 @@ RUN apk add --no-cache \
   && make \
   && make install
 
-FROM alpine:3.12 as prod
+FROM alpine:3.14 as prod
 
 LABEL maintainer="Carlos Remuzzi carlosremuzzi@gmail.com"
 LABEL org.label-schema.description="yet another SoftHSMv2 dockerization"
